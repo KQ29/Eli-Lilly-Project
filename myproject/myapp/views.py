@@ -2,7 +2,7 @@ import os
 import json
 from django.conf import settings
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 def get_medicines_data():
     """Load medicines from JSON file."""
@@ -67,12 +67,12 @@ def add_to_cart(request, med_id):
 def cart(request):
     """
     Retrieve the session cart and pass a list of items to the template.
-    For each item, attach a 'cart_key' that is a numeric string.
-    Any legacy non-numeric keys are removed.
+    For each item, attach a 'cart_key' (the numeric string of the medicine id).
+    Also, clean up any legacy keys (non-numeric).
     """
     cart_session = request.session.get('cart', {})
 
-    # Clean up any keys that are not numeric
+    # Remove legacy keys that are not numeric.
     keys_to_remove = [key for key in cart_session if not key.isdigit()]
     for key in keys_to_remove:
         del cart_session[key]
@@ -96,9 +96,8 @@ def increase_quantity(request, med_id):
     if request.method == "POST":
         cart = request.session.get('cart', {})
         key = str(med_id)
-        if key in cart:
-            if cart[key]['quantity'] < 20:
-                cart[key]['quantity'] += 1
+        if key in cart and cart[key]['quantity'] < 20:
+            cart[key]['quantity'] += 1
             request.session['cart'] = cart
     return redirect('cart')
 
