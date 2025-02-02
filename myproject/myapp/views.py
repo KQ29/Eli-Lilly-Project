@@ -67,25 +67,20 @@ def add_to_cart(request, med_id):
 def cart(request):
     """
     Retrieve the session cart and pass a list of items to the template.
-    This version removes any items whose key is not numeric.
-    For each item, attach a 'cart_key' that is the string version of the medicine id.
+    For each item, attach a 'cart_key' that is a numeric string.
+    Any legacy non-numeric keys are removed.
     """
-    # Get the current session cart
     cart_session = request.session.get('cart', {})
-    
-    # Identify keys that are not numeric
+
+    # Clean up any keys that are not numeric
     keys_to_remove = [key for key in cart_session if not key.isdigit()]
     for key in keys_to_remove:
         del cart_session[key]
-    
-    # Update the session cart after cleaning
     request.session['cart'] = cart_session
 
-    # Now build the list of cart items
     cart_items = []
     for key, item in cart_session.items():
         if isinstance(item, dict):
-            # The key should now be numeric; attach it as cart_key.
             item['cart_key'] = key
             cart_items.append(item)
     context = {

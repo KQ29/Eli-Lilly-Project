@@ -122,6 +122,26 @@
     .inline-form {
       display: inline;
     }
+    /* Checkout Button Styling */
+    .checkout-btn {
+      background: var(--primary-color);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background var(--transition-speed);
+      display: inline-block;
+      margin-top: 20px;
+    }
+    .checkout-btn:hover {
+      background: var(--secondary-color);
+      color: var(--primary-color);
+    }
+    .checkout-container {
+      text-align: right;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -182,6 +202,10 @@
             {% endfor %}
           </tbody>
         </table>
+        <!-- Checkout Button: Appears only if there is at least one cart item -->
+        <div class="checkout-container">
+          <a href="#" class="checkout-btn">Checkout</a>
+        </div>
         {% else %}
           <p style="text-align: center; font-size: 1.2rem; color: black;">
             Your cart is empty.
