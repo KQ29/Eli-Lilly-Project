@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart - Eli Lilly{% endblock %}
+
+{% block content %}
+  <style>
+    /* CSS for the Cart Page */
+    .cart {
+      padding: 40px 0;
+      background: #f9f9f9;
+    }
+    .cart .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+    .cart h2 {
+      font-size: 2rem;
+      color: #D52B1E;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .cart-items {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+    .cart-items th,
+    .cart-items td {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    .cart-items th {
+      background: #D52B1E;
+      color: #fff;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .cart-items th,
+      .cart-items td {
+        padding: 10px;
+      }
+    }
+  </style>
+
+  <section class="cart">
+    <div class="container">
+      <h2>Your Cart</h2>
+      <table class="cart-items">
+        <thead>
+          <tr>
+            <th>Medicine</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if cart_items %}
+            {% for item in cart_items %}
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="2">Your cart is empty.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}
