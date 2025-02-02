@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+
     <!-- Navbar -->
     <header>
         <div class="logo">
@@ -22,7 +23,12 @@
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'medicines' %}">Medicines</a></li>
                 <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact</a></li>
+                <!-- Replace Contact with Cart Icon that leads to cart.html -->
+                <li>
+                    <a href="{% url 'cart' %}">
+                        <img src="{% static 'images/cart-icon.png' %}" alt="Cart" style="width:24px; height:auto;">
+                    </a>
+                </li>
             </ul>
         </nav>
     </header>

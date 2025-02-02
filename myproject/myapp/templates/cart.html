@@ -89,8 +89,8 @@
         text-align: left;
       }
     }
-    /* Remove Button Styling */
-    .remove-btn {
+    /* Button Styling for +, -, and Remove */
+    .adjust-btn {
       background: var(--primary-color);
       color: #fff;
       border: none;
@@ -98,10 +98,29 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background var(--transition-speed);
+      margin: 0 5px;
     }
-    .remove-btn:hover {
+    .adjust-btn:hover {
       background: var(--secondary-color);
       color: var(--primary-color);
+    }
+    .remove-btn {
+      background: #ff4d4d;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background var(--transition-speed);
+      margin: 0 5px;
+    }
+    .remove-btn:hover {
+      background: #ffb3b3;
+      color: var(--primary-color);
+    }
+    /* Inline form styling to display buttons side-by-side */
+    .inline-form {
+      display: inline;
     }
   </style>
 </head>
@@ -143,7 +162,18 @@
               <td data-label="Medicine">{{ item.name }}</td>
               <td data-label="Quantity">{{ item.quantity }}</td>
               <td data-label="Action">
-                <form method="post" action="{% url 'remove_from_cart' item.cart_key %}">
+                <!-- Decrease Quantity Button -->
+                <form method="post" action="{% url 'decrease_quantity' item.cart_key %}" class="inline-form">
+                  {% csrf_token %}
+                  <button type="submit" class="adjust-btn">–</button>
+                </form>
+                <!-- Increase Quantity Button -->
+                <form method="post" action="{% url 'increase_quantity' item.cart_key %}" class="inline-form">
+                  {% csrf_token %}
+                  <button type="submit" class="adjust-btn">+</button>
+                </form>
+                <!-- Remove Button -->
+                <form method="post" action="{% url 'remove_from_cart' item.cart_key %}" class="inline-form">
                   {% csrf_token %}
                   <button type="submit" class="remove-btn">Remove</button>
                 </form>
@@ -153,7 +183,7 @@
           </tbody>
         </table>
         {% else %}
-          <p style="text-align: center; font-size: 1.2rem; color: var(--primary-color);">
+          <p style="text-align: center; font-size: 1.2rem; color: black;">
             Your cart is empty.
           </p>
         {% endif %}
