@@ -23,6 +23,30 @@
       "name": "Emgality",
       "description": "For Migraine Prevention",
       "image": "images/emgality.jpeg"
+    },
+    {
+      "id": 5,
+      "name": "Trulicity",
+      "description": "For Type 2 Diabetes",
+      "image": "images/trulicity.webp"
+    },
+    {
+      "id": 6,
+      "name": "Jardiance",
+      "description": "For Heart & Kidney Health",
+      "image": "images/jardiance.webp"
+    },
+    {
+      "id": 7,
+      "name": "Verzenio",
+      "description": "For Breast Cancer",
+      "image": "images/verzenio.jpg"
+    },
+    {
+      "id": 8,
+      "name": "Emgality",
+      "description": "For Migraine Prevention",
+      "image": "images/emgality.jpeg"
     }
   ]
 }

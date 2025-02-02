@@ -19,6 +19,14 @@ def get_medicine_by_id(med_id):
             return med
     return None
 
+def get_medicine_by_name(med_name):
+    """Look up a medicine by its name in the JSON data."""
+    medicines = get_medicines_data()
+    for med in medicines:
+        if med.get('name') == med_name:
+            return med
+    return None
+
 def home(request):
     return render(request, 'home.html')
 
@@ -59,14 +67,37 @@ def add_to_cart(request, med_id):
 def cart(request):
     """
     Retrieve the session cart and pass a list of items to the template.
-    (No removal functionality is provided.)
+    Attach a 'cart_key' to each item that is guaranteed to be a numeric string.
     """
     cart_session = request.session.get('cart', {})
     cart_items = []
     for key, item in cart_session.items():
         if isinstance(item, dict):
+            # If the key is already numeric, use it.
+            if key.isdigit():
+                item['cart_key'] = key
+            else:
+                # Otherwise, try to look up the medicine by name and use its id.
+                med = get_medicine_by_name(item.get('name', ''))
+                if med and isinstance(med.get('id'), int):
+                    item['cart_key'] = str(med['id'])
+                else:
+                    # Fallback: skip this item (or you could force deletion)
+                    continue
             cart_items.append(item)
     context = {
         'cart_items': cart_items
     }
     return render(request, 'cart.html', context)
+
+def remove_from_cart(request, med_id):
+    """
+    Remove the chosen medicine (by id) from the session-based cart.
+    """
+    if request.method == "POST":
+        cart = request.session.get('cart', {})
+        key = str(med_id)
+        if key in cart:
+            del cart[key]
+            request.session['cart'] = cart
+    return redirect('cart')

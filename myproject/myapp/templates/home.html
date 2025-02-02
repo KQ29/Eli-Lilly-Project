@@ -11,3 +11,24 @@
         </div>
     </section>
 {% endblock %}
+
+{% block footer %}
+  <style>
+
+    footer.fixed-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      z-index: 100;
+    }
+
+  </style>
+  <footer class="fixed-footer">
+      <p>&copy; 2025 Eli Lilly. All rights reserved.</p>
+  </footer>
+{% endblock %}

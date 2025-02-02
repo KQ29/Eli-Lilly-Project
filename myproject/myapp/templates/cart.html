@@ -1,73 +1,171 @@
-{% extends 'base.html' %}
-
-{% block title %}Cart - Eli Lilly{% endblock %}
-
-{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - Eli Lilly</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon-new.svg' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
   <style>
-    /* CSS for the Cart Page */
+    /* Ensure html and body fill the viewport */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--background-color);
+      font-family: var(--font-family);
+    }
+    /* Reserve bottom space so content doesn't get hidden */
+    main {
+      margin-bottom: 80px; /* Adjust if your footer height changes */
+    }
+    /* Fixed footer styles */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      z-index: 100;
+    }
+    /* Cart Section Styles */
     .cart {
-      padding: 40px 0;
-      background: #f9f9f9;
+      padding: 60px 0;
+      background: var(--background-color);
     }
     .cart .container {
-      width: 80%;
-      margin: 0 auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     .cart h2 {
-      font-size: 2rem;
-      color: #D52B1E;
-      margin-bottom: 20px;
       text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      color: var(--primary-color);
     }
     .cart-items {
       width: 100%;
       border-collapse: collapse;
-      margin: 0 auto;
     }
     .cart-items th,
     .cart-items td {
       padding: 15px;
+      text-align: left;
       border-bottom: 1px solid #ddd;
-      text-align: center;
     }
     .cart-items th {
-      background: #D52B1E;
-      color: #fff;
+      background: #f4f4f4;
+      font-weight: bold;
     }
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
+    .cart-items tr:last-child td {
+      border-bottom: none;
+    }
+    /* Responsive adjustments for table */
+    @media (max-width: 600px) {
+      .cart-items, .cart-items th, .cart-items td {
+        display: block;
+        width: 100%;
+      }
       .cart-items th,
       .cart-items td {
-        padding: 10px;
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+      }
+      .cart-items th::before,
+      .cart-items td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
       }
     }
+    /* Remove Button Styling */
+    .remove-btn {
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+    .remove-btn:hover {
+      background: var(--secondary-color);
+      color: var(--primary-color);
+    }
   </style>
-
-  <section class="cart">
-    <div class="container">
-      <h2>Your Cart</h2>
-      <table class="cart-items">
-        <thead>
-          <tr>
-            <th>Medicine</th>
-            <th>Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% if cart_items %}
-            {% for item in cart_items %}
-              <tr>
-                <td>{{ item.name }}</td>
-                <td>{{ item.quantity }}</td>
-              </tr>
-            {% endfor %}
-          {% else %}
-            <tr>
-              <td colspan="2">Your cart is empty.</td>
-            </tr>
-          {% endif %}
-        </tbody>
-      </table>
+</head>
+<body>
+  <!-- Header / Navbar -->
+  <header>
+    <div class="logo">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'images/lilly-logo.png' %}" alt="Eli Lilly Logo">
+      </a>
     </div>
-  </section>
-{% endblock %}
+    <nav>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'medicines' %}">Medicines</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="cart">
+      <div class="container">
+        <h2>Your Cart</h2>
+        {% if cart_items %}
+        <table class="cart-items">
+          <thead>
+            <tr>
+              <th>Medicine</th>
+              <th>Quantity</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items %}
+            <tr>
+              <td data-label="Medicine">{{ item.name }}</td>
+              <td data-label="Quantity">{{ item.quantity }}</td>
+              <td data-label="Action">
+                <form method="post" action="{% url 'remove_from_cart' item.cart_key %}">
+                  {% csrf_token %}
+                  <button type="submit" class="remove-btn">Remove</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+          <p style="text-align: center; font-size: 1.2rem; color: var(--primary-color);">
+            Your cart is empty.
+          </p>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Fixed to the Bottom) -->
+  <footer>
+    <p>&copy; 2025 Eli Lilly. All rights reserved.</p>
+  </footer>
+
+  <script src="{% static 'js/quantity.js' %}"></script>
+</body>
+</html>
