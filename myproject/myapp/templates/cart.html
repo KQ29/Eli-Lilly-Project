@@ -142,13 +142,40 @@
       text-align: right;
       margin-top: 20px;
     }
-    /* Image in cart table */
+    /* Cart Item Image Styling */
     .cart-item-img {
       width: 50px;
       height: auto;
       border-radius: 5px;
       margin-right: 10px;
       vertical-align: middle;
+      cursor: pointer; /* Indicate that image is clickable */
+    }
+    /* Modal overlay styles */
+    .modal-overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 200;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      max-width: 80%;
+      max-height: 80%;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -190,10 +217,9 @@
             <tr>
               <td data-label="Picture">
                 {% if item.image_url %}
-                  <img src="{% static item.image_url %}" alt="{{ item.name }}" class="cart-item-img">
+                  <img src="{% static item.image_url %}" alt="{{ item.name }}" class="cart-item-img" onclick="openModal('{% static item.image_url %}')">
                 {% else %}
-                  <!-- Optionally, display a placeholder image -->
-                  <img src="{% static 'images/placeholder.png' %}" alt="No image" class="cart-item-img">
+                  <img src="{% static 'images/placeholder.png' %}" alt="No image" class="cart-item-img" onclick="openModal('{% static 'images/placeholder.png' %}')">
                 {% endif %}
               </td>
               <td data-label="Medicine">{{ item.name }}</td>
@@ -232,10 +258,29 @@
     </section>
   </main>
 
+  <!-- Modal Overlay for Enlarged Image -->
+  <div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <img id="modalImage" class="modal-content" src="" alt="Enlarged Image">
+  </div>
+
   <!-- Footer (Fixed to the Bottom) -->
   <footer>
     <p>&copy; 2025 Eli Lilly. All rights reserved.</p>
   </footer>
 
+  <script>
+    // Open modal with the clicked image
+    function openModal(imageSrc) {
+      document.getElementById("modalImage").src = imageSrc;
+      document.getElementById("modalOverlay").style.display = "flex";
+    }
+
+    // Close the modal
+    function closeModal() {
+      document.getElementById("modalOverlay").style.display = "none";
+    }
+  </script>
+  <script src="{% static 'js/quantity.js' %}"></script>
 </body>
 </html>
