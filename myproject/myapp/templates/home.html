@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %} Home - Eli Lilly {% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Innovating for a Healthier Future</h1>
+            <p>Discover groundbreaking medicines that change lives.</p>
+            <a href="{% url 'medicines' %}" class="btn">Explore Medicines</a>
+        </div>
+    </section>
+{% endblock %}

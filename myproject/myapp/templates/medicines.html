@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Medicines - Eli Lilly{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="medicines-list">
+        <h2>Our Medicines</h2>
+
+        <div class="medicines-grid">
+            {% for med in medicines_list %}
+            <div class="medicine">
+                <img src="{% static med.image %}" alt="{{ med.name }}">
+                <h3>{{ med.name }}</h3>
+                <p>{{ med.description }}</p>
+                <!-- Removed the +/- quantity controls; only Add to Cart remains -->
+                <a href="#" class="btn">Add to Cart</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

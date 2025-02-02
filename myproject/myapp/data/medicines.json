@@ -1,0 +1,45 @@
+{
+    "medicines": [
+      {
+        "name": "Trulicity",
+        "description": "For Type 2 Diabetes",
+        "image": "images/trulicity.webp"
+      },
+      {
+        "name": "Jardiance",
+        "description": "For Heart & Kidney Health",
+        "image": "images/jardiance.webp"
+      },
+      {
+        "name": "Verzenio",
+        "description": "For Breast Cancer",
+        "image": "images/verzenio.jpg"
+      },
+      {
+        "name": "Emgality",
+        "description": "For Migraine Prevention",
+        "image": "images/emgality.jpeg"
+      },
+      {
+        "name": "Trulicity",
+        "description": "For Type 2 Diabetes",
+        "image": "images/trulicity.webp"
+      },
+      {
+        "name": "Jardiance",
+        "description": "For Heart & Kidney Health",
+        "image": "images/jardiance.webp"
+      },
+      {
+        "name": "Verzenio",
+        "description": "For Breast Cancer",
+        "image": "images/verzenio.jpg"
+      },
+      {
+        "name": "Emgality",
+        "description": "For Migraine Prevention",
+        "image": "images/emgality.jpeg"
+      }
+    ]
+  }
+  
