@@ -8,7 +8,6 @@
     --transition-speed: 0.3s;
 }
 
-/* Reset and General Styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -23,12 +22,10 @@ html, body {
     background-color: var(--background-color);
 }
 
-/* Smooth Scrolling */
 html {
     scroll-behavior: smooth;
 }
 
-/* Container to center main content */
 .container {
     width: 80%;
     max-width: 1200px;
@@ -218,7 +215,6 @@ nav ul li a:hover::after {
     color: var(--text-color);
 }
 
-/* The "Add to Cart" button */
 .medicine .btn {
     background: var(--primary-color);
     color: #fff;

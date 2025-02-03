@@ -5,7 +5,7 @@
       "name": "Trulicity",
       "description": "For Type 2 Diabetes",
       "image": "images/trulicity.webp",
-      "price": "$200",
+      "price": 200,
       "quantity": 100,
       "availability": "In Stock"
     },
@@ -14,7 +14,7 @@
       "name": "Jardiance",
       "description": "For Heart & Kidney Health",
       "image": "images/jardiance.webp",
-      "price": "$150",
+      "price": 150,
       "quantity": 50,
       "availability": "In Stock"
     },
@@ -23,7 +23,7 @@
       "name": "Verzenio",
       "description": "For Breast Cancer",
       "image": "images/verzenio.jpg",
-      "price": "$250",
+      "price": 250,
       "quantity": 0,
       "availability": "Out of Stock"
     },
@@ -32,7 +32,7 @@
       "name": "Emgality",
       "description": "For Migraine Prevention",
       "image": "images/emgality.jpeg",
-      "price": "$180",
+      "price": 180,
       "quantity": 25,
       "availability": "In Stock"
     }

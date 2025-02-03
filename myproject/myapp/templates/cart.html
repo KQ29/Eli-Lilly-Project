@@ -8,7 +8,6 @@
   <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon-new.svg' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
   <style>
-    /* Ensure html and body fill the viewport */
     html, body {
       margin: 0;
       padding: 0;
@@ -16,11 +15,11 @@
       background: var(--background-color);
       font-family: var(--font-family);
     }
-    /* Reserve bottom space so content doesn't get hidden */
+
     main {
-      margin-bottom: 80px; /* Adjust if your footer height changes */
+      margin-bottom: 80px;
     }
-    /* Fixed footer styles */
+
     footer {
       position: fixed;
       bottom: 0;
@@ -118,7 +117,7 @@
       background: #ffb3b3;
       color: var(--primary-color);
     }
-    /* Inline form styling to display buttons side-by-side */
+
     .inline-form {
       display: inline;
     }
@@ -177,6 +176,15 @@
       color: white;
       cursor: pointer;
     }
+
+    .price-column, .subtotal-column {
+      text-align: center;
+    }
+
+    .cart-total-row {
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
@@ -208,7 +216,9 @@
             <tr>
               <th>Image</th>
               <th>Medicine</th>
+              <th class="price-column">Price</th>
               <th>Quantity</th>
+              <th class="subtotal-column">Subtotal</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -223,7 +233,17 @@
                 {% endif %}
               </td>
               <td data-label="Medicine">{{ item.name }}</td>
+              <!-- Price Column -->
+              <td data-label="Price" class="price-column">
+                £{{ item.price|floatformat:2 }}
+              </td>
+              <!-- Quantity -->
               <td data-label="Quantity">{{ item.quantity }}</td>
+              <!-- Subtotal Column -->
+              <td data-label="Subtotal" class="subtotal-column">
+                £{{ item.subtotal|floatformat:2 }}
+              </td>
+              <!-- Actions -->
               <td data-label="Action">
                 <!-- Decrease Quantity Button -->
                 <form method="post" action="{% url 'decrease_quantity' item.cart_key %}" class="inline-form">
@@ -243,8 +263,17 @@
               </td>
             </tr>
             {% endfor %}
+            <!-- Overall Total Row -->
+            <tr class="cart-total-row">
+              <td colspan="4" style="text-align:right;">Total:</td>
+              <td class="subtotal-column">
+                £{{ total_price|floatformat:2 }}
+              </td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
+
         <!-- Checkout Button: Appears only if there is at least one cart item -->
         <div class="checkout-container">
           <a href="#" class="checkout-btn">Checkout</a>
@@ -283,4 +312,3 @@
   </script>
 </body>
 </html>
- 
