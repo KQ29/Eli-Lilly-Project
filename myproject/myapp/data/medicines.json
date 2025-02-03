@@ -4,49 +4,37 @@
       "id": 1,
       "name": "Trulicity",
       "description": "For Type 2 Diabetes",
-      "image": "images/trulicity.webp"
+      "image": "images/trulicity.webp",
+      "price": "$200",
+      "quantity": 100,
+      "availability": "In Stock"
     },
     {
       "id": 2,
       "name": "Jardiance",
       "description": "For Heart & Kidney Health",
-      "image": "images/jardiance.webp"
+      "image": "images/jardiance.webp",
+      "price": "$150",
+      "quantity": 50,
+      "availability": "In Stock"
     },
     {
       "id": 3,
       "name": "Verzenio",
       "description": "For Breast Cancer",
-      "image": "images/verzenio.jpg"
+      "image": "images/verzenio.jpg",
+      "price": "$250",
+      "quantity": 0,
+      "availability": "Out of Stock"
     },
     {
       "id": 4,
       "name": "Emgality",
       "description": "For Migraine Prevention",
-      "image": "images/emgality.jpeg"
-    },
-    {
-      "id": 5,
-      "name": "Trulicity",
-      "description": "For Type 2 Diabetes",
-      "image": "images/trulicity.webp"
-    },
-    {
-      "id": 6,
-      "name": "Jardiance",
-      "description": "For Heart & Kidney Health",
-      "image": "images/jardiance.webp"
-    },
-    {
-      "id": 7,
-      "name": "Verzenio",
-      "description": "For Breast Cancer",
-      "image": "images/verzenio.jpg"
-    },
-    {
-      "id": 8,
-      "name": "Emgality",
-      "description": "For Migraine Prevention",
-      "image": "images/emgality.jpeg"
+      "image": "images/emgality.jpeg",
+      "price": "$180",
+      "quantity": 25,
+      "availability": "In Stock"
     }
   ]
 }

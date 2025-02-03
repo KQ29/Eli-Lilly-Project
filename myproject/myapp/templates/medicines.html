@@ -4,19 +4,60 @@
 {% block title %}Medicines - Eli Lilly{% endblock %}
 
 {% block content %}
+<style>
+
+.btn .btn-hover {
+    display: none;
+    transition: opacity 0.3s ease;
+}
+.btn .btn-price {
+    transition: opacity 0.3s ease;
+}
+
+.btn:hover .btn-price {
+    display: none;
+}
+.btn:hover .btn-hover {
+    display: inline;
+}
+
+.btn:disabled {
+    background: #cccccc; 
+    color: #666666;    
+    cursor: not-allowed;
+    pointer-events: none; 
+}
+.btn:disabled .btn-hover {
+    display: none;
+}
+.btn:disabled .btn-price {
+    display: inline;
+}
+
+.medicine.out-of-stock {
+    background: #e0e0e0;
+}
+.medicine.out-of-stock img {
+    filter: grayscale(100%);
+}
+</style>
 <div class="container">
     <section class="medicines-list">
         <h2>Our Medicines</h2>
         <div class="medicines-grid">
             {% for med in medicines_list %}
-            <div class="medicine">
+            <div class="medicine {% if med.availability == 'Out of Stock' %} out-of-stock {% endif %}">
                 <img src="{% static med.image %}" alt="{{ med.name }}">
                 <h3>{{ med.name }}</h3>
                 <p>{{ med.description }}</p>
-                <!-- The form posts to add_to_cart with the medicine's id -->
+                <p><strong>Availability:</strong> {{ med.availability }}</p>
+
                 <form action="{% url 'add_to_cart' med.id %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="btn">Add to Cart</button>
+                    <button type="submit" class="btn" {% if med.availability == "Out of Stock" %} disabled {% endif %}>
+                        <span class="btn-price">{{ med.price }}</span>
+                        <span class="btn-hover">Add to Cart</span>
+                    </button>
                 </form>
             </div>
             {% endfor %}
