@@ -3,11 +3,11 @@ import json
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import Http404
+from django.contrib import messages  # For displaying checkout messages
 
 # -------------------------------------------
 # Utility Functions
 # -------------------------------------------
-
 def get_medicines_data():
     """Load medicines from JSON file."""
     json_path = os.path.join(settings.BASE_DIR, 'myapp', 'data', 'medicines.json')
@@ -23,10 +23,28 @@ def get_medicine_by_id(med_id):
             return med
     return None
 
+def update_json_inventory(inventory):
+    """
+    Update the JSON file's medicines with the new quantities.
+    `inventory` is a dictionary mapping medicine IDs (as strings) to new quantity values.
+    """
+    json_path = os.path.join(settings.BASE_DIR, 'myapp', 'data', 'medicines.json')
+    # Open the JSON file for reading and writing.
+    with open(json_path, 'r+', encoding='utf-8') as f:
+        data = json.load(f)
+        # For each medicine in the JSON, update its quantity if we have a value in the inventory.
+        for med in data.get('medicines', []):
+            med_id = str(med.get('id'))
+            if med_id in inventory:
+                med['quantity'] = inventory[med_id]
+        # Move the file pointer to the beginning and truncate the file.
+        f.seek(0)
+        json.dump(data, f, indent=2)
+        f.truncate()
+
 # -------------------------------------------
 # Basic Views
 # -------------------------------------------
-
 def home(request):
     """Render the home page."""
     return render(request, 'home.html')
@@ -46,18 +64,14 @@ def medicines(request):
     medicines_list = get_medicines_data()
     cart = request.session.get('cart', {})
 
-    # Recalculate inventory for each medicine using fresh JSON data.
-    # This ignores any previously stored 'inventory' in the session.
+    # Recalculate inventory using fresh JSON data.
     inventory = {}
     for med in medicines_list:
         json_quantity = med.get('quantity', 0)
-        # Check if this medicine is already in the cart.
         key = str(med['id'])
         cart_qty = cart.get(key, {}).get('quantity', 0)
-        # Compute available inventory.
         available = json_quantity - cart_qty
         inventory[key] = available
-        # Update the medicine data for display.
         med['quantity'] = available
         if available <= 0:
             med['availability'] = "Out of Stock"
@@ -75,7 +89,6 @@ def medicines(request):
 # -------------------------------------------
 # Cart and Inventory Operations
 # -------------------------------------------
-
 def add_to_cart(request, med_id):
     """
     Add the chosen medicine to the session‐based cart.
@@ -85,21 +98,13 @@ def add_to_cart(request, med_id):
         med = get_medicine_by_id(med_id)
         if not med:
             raise Http404("Medicine not found")
-
-        # Get the current inventory from the session.
         inventory = request.session.get('inventory', {})
         key = str(med_id)
         available = inventory.get(key, 0)
-
-        # If no stock is available, simply redirect.
         if available <= 0:
             return redirect('medicines')
-
-        # Decrease the available quantity by 1.
         inventory[key] = available - 1
         request.session['inventory'] = inventory
-
-        # Now, add the medicine to the cart.
         cart = request.session.get('cart', {})
         if key in cart:
             if cart[key]['quantity'] < 20:
@@ -121,8 +126,6 @@ def cart(request):
     Retrieve the session cart and calculate subtotals and total price.
     """
     cart_session = request.session.get('cart', {})
-
-    # Remove any legacy keys that are not numeric.
     keys_to_remove = [key for key in cart_session if not key.isdigit()]
     for key in keys_to_remove:
         del cart_session[key]
@@ -158,7 +161,6 @@ def increase_quantity(request, med_id):
         if key in cart and inventory.get(key, 0) > 0:
             if cart[key]['quantity'] < 20:
                 cart[key]['quantity'] += 1
-                # Decrease inventory by 1.
                 inventory[key] = inventory.get(key, 0) - 1
                 request.session['cart'] = cart
                 request.session['inventory'] = inventory
@@ -177,10 +179,8 @@ def decrease_quantity(request, med_id):
         if key in cart:
             if cart[key]['quantity'] > 1:
                 cart[key]['quantity'] -= 1
-                # Return 1 unit to inventory.
                 inventory[key] = inventory.get(key, 0) + 1
             else:
-                # If quantity is 1, remove the item and return 1 unit.
                 inventory[key] = inventory.get(key, 0) + 1
                 del cart[key]
             request.session['cart'] = cart
@@ -197,10 +197,30 @@ def remove_from_cart(request, med_id):
         inventory = request.session.get('inventory', {})
         key = str(med_id)
         if key in cart:
-            # Return all of the item's quantity to inventory.
             qty = cart[key]['quantity']
             inventory[key] = inventory.get(key, 0) + qty
             del cart[key]
             request.session['cart'] = cart
             request.session['inventory'] = inventory
     return redirect('cart')
+
+# -------------------------------------------
+# Checkout Operation
+# -------------------------------------------
+def checkout(request):
+    """
+    When the user presses "Checkout", simulate a successful purchase.
+    Update the JSON file so that the quantities are permanently reduced,
+    then clear the cart and display a success message.
+    """
+    if request.method == "POST":
+        # Retrieve the current inventory from the session.
+        inventory = request.session.get('inventory', {})
+        # Update the JSON file with the new inventory.
+        update_json_inventory(inventory)
+        # Clear the cart.
+        request.session['cart'] = {}
+        messages.success(request, "You bought successfully!")
+        return redirect('cart')
+    else:
+        return redirect('cart')

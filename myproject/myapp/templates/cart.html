@@ -18,7 +18,7 @@
     }
 
     main {
-      margin-bottom: 80px; /* Footer space */
+      margin-bottom: 80px;
     }
 
     footer {
@@ -69,20 +69,16 @@
     }
     /* Responsive adjustments for table */
     @media (max-width: 600px) {
-      .cart-items,
-      .cart-items th,
-      .cart-items td {
+      .cart-items, .cart-items th, .cart-items td {
         display: block;
         width: 100%;
       }
-      .cart-items th,
-      .cart-items td {
+      .cart-items th, .cart-items td {
         text-align: right;
         padding-left: 50%;
         position: relative;
       }
-      .cart-items th::before,
-      .cart-items td::before {
+      .cart-items th::before, .cart-items td::before {
         content: attr(data-label);
         position: absolute;
         left: 0;
@@ -121,16 +117,16 @@
       background: #ffb3b3;
       color: var(--primary-color);
     }
-
     .inline-form {
       display: inline;
     }
-
-    /* Checkout Button Styling */
+    /* Checkout Button Styling (Increased Size) */
     .checkout-btn {
       background: var(--primary-color);
       color: #fff;
-      padding: 10px 20px;
+      padding: 10px 15px;  /* Increased padding */
+      font-size: 1.2rem;   /* Increased font size */
+      border: none;        /* Remove border */
       border-radius: 5px;
       text-decoration: none;
       font-weight: bold;
@@ -146,16 +142,32 @@
       text-align: right;
       margin-top: 20px;
     }
-
     /* Price & Subtotal Columns Alignment */
-    .price-column,
-    .subtotal-column {
+    .price-column, .subtotal-column {
       text-align: center;
     }
-
     /* Bold total row */
     .cart-total-row {
       font-weight: bold;
+    }
+    /* Messages */
+    .messages {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .messages li {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .messages li.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .messages li.error {
+      background-color: #f8d7da;
+      color: #721c24;
     }
   </style>
 </head>
@@ -182,6 +194,14 @@
     <section class="cart">
       <div class="container">
         <h2>Your Cart</h2>
+        {# Display messages, if any #}
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
         {% if cart_items %}
         <table class="cart-items">
           <thead>
@@ -197,7 +217,7 @@
           <tbody>
             {% for item in cart_items %}
             <tr>
-              <!-- No Image: skipping the image/placeholder entirely -->
+              <!-- No Image: skipping image/placeholder -->
               <td data-label="Medicine">{{ item.name }}</td>
               <!-- Price Column -->
               <td data-label="Price" class="price-column">
@@ -240,9 +260,12 @@
           </tbody>
         </table>
 
-        <!-- Checkout Button: Appears only if there is at least one cart item -->
+        <!-- Checkout Form -->
         <div class="checkout-container">
-          <a href="#" class="checkout-btn">Checkout</a>
+          <form method="post" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <button type="submit" class="checkout-btn">Checkout</button>
+          </form>
         </div>
         {% else %}
           <p style="text-align: center; font-size: 1.2rem; color: black;">
@@ -257,6 +280,5 @@
   <footer>
     <p>&copy; 2025 Eli Lilly. All rights reserved.</p>
   </footer>
-
 </body>
 </html>
