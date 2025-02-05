@@ -280,5 +280,18 @@
   <footer>
     <p>&copy; 2025 Eli Lilly. All rights reserved.</p>
   </footer>
+
+  <!-- JavaScript to hide messages after 3 seconds -->
+  <script>
+    // Wait 3 seconds (3000 milliseconds) before hiding the messages
+    setTimeout(function() {
+      var messages = document.querySelector('.messages');
+      if (messages) {
+        messages.style.display = 'none';
+        // Alternatively, you can completely remove the element:
+        // messages.parentNode.removeChild(messages);
+      }
+    }, 5000);
+  </script>
 </body>
 </html>
