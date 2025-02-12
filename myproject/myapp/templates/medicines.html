@@ -5,7 +5,7 @@
 
 {% block content %}
 <style>
-/* Remove image-specific CSS */
+/* Button hover effect */
 .btn .btn-hover {
     display: none;
     transition: opacity 0.3s ease;
@@ -13,7 +13,6 @@
 .btn .btn-price {
     transition: opacity 0.3s ease;
 }
-
 .btn:hover .btn-price {
     display: none;
 }
@@ -21,6 +20,7 @@
     display: inline;
 }
 
+/* Disabled button styling */
 .btn:disabled {
     background: #cccccc; 
     color: #666666;    
@@ -34,19 +34,24 @@
     display: inline;
 }
 
-/* Optional: remove out-of-stock image styling */
+/* Out-of-stock medicine styling */
 .medicine.out-of-stock {
     background: #e0e0e0;
 }
+.medicine.out-of-stock img {
+    filter: grayscale(100%);
+}
 </style>
+
 <div class="container">
     <section class="medicines-list">
         <h2>Our Medicines</h2>
         <div class="medicines-grid">
             {% for med in medicines_list %}
             <div class="medicine {% if med.availability == 'Out of Stock' %} out-of-stock {% endif %}">
-                {# Image removed #}
+                <img src="{% static med.image %}" alt="{{ med.name }}">
                 <h3>{{ med.name }}</h3>
+                <p>{{ med.description }}</p>
                 {% if med.availability == "In Stock" %}
                     <p><strong>Available:</strong> {{ med.quantity }}</p>
                 {% else %}
@@ -54,7 +59,7 @@
                 {% endif %}
                 <form action="{% url 'add_to_cart' med.id %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="btn" {% if med.availability == "Out of Stock" or med.quantity == 0 %} disabled {% endif %}>
+                    <button type="submit" class="btn" {% if med.availability == "Out of Stock" %} disabled {% endif %}>
                         <span class="btn-price">£{{ med.price }}</span>
                         <span class="btn-hover">Add to Cart</span>
                     </button>

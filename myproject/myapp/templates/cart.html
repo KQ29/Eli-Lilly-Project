@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon-new.svg' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
   <style>
-    /* Ensure html and body fill the viewport */
+    /* Base styles */
     html, body {
       margin: 0;
       padding: 0;
@@ -16,11 +16,9 @@
       background: var(--background-color);
       font-family: var(--font-family);
     }
-
     main {
       margin-bottom: 80px;
     }
-
     footer {
       position: fixed;
       bottom: 0;
@@ -88,7 +86,7 @@
         text-align: left;
       }
     }
-    /* Button Styling for +, -, and Remove */
+    /* Button Styling for Adjust and Remove */
     .adjust-btn {
       background: var(--primary-color);
       color: #fff;
@@ -120,13 +118,13 @@
     .inline-form {
       display: inline;
     }
-    /* Checkout Button Styling (Increased Size) */
+    /* Checkout Button Styling */
     .checkout-btn {
       background: var(--primary-color);
       color: #fff;
-      padding: 10px 15px;  /* Increased padding */
-      font-size: 1.2rem;   /* Increased font size */
-      border: none;        /* Remove border */
+      padding: 10px 15px;
+      font-size: 1.2rem;
+      border: none;
       border-radius: 5px;
       text-decoration: none;
       font-weight: bold;
@@ -146,7 +144,7 @@
     .price-column, .subtotal-column {
       text-align: center;
     }
-    /* Bold total row */
+    /* Bold Total Row */
     .cart-total-row {
       font-weight: bold;
     }
@@ -168,6 +166,40 @@
     .messages li.error {
       background-color: #f8d7da;
       color: #721c24;
+    }
+    /* Cart Item Image & Modal Styles */
+    .cart-item-img {
+      width: 50px;
+      height: auto;
+      border-radius: 5px;
+      margin-right: 10px;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+    .modal-overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 200;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      max-width: 80%;
+      max-height: 80%;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -194,7 +226,7 @@
     <section class="cart">
       <div class="container">
         <h2>Your Cart</h2>
-        {# Display messages, if any #}
+        {# Display Django messages (if any) #}
         {% if messages %}
           <ul class="messages">
             {% for message in messages %}
@@ -206,7 +238,7 @@
         <table class="cart-items">
           <thead>
             <tr>
-              <!-- Image column removed -->
+              <th>Image</th>
               <th>Medicine</th>
               <th class="price-column">Price</th>
               <th>Quantity</th>
@@ -217,19 +249,21 @@
           <tbody>
             {% for item in cart_items %}
             <tr>
-              <!-- No Image: skipping image/placeholder -->
+              <td data-label="Image">
+                {% if item.image_url %}
+                  <img src="{% static item.image_url %}" alt="{{ item.name }}" class="cart-item-img" onclick="openModal('{% static item.image_url %}')">
+                {% else %}
+                  <img src="{% static 'images/placeholder.png' %}" alt="No image" class="cart-item-img" onclick="openModal('{% static 'images/placeholder.png' %}')">
+                {% endif %}
+              </td>
               <td data-label="Medicine">{{ item.name }}</td>
-              <!-- Price Column -->
               <td data-label="Price" class="price-column">
                 £{{ item.price|floatformat:2 }}
               </td>
-              <!-- Quantity -->
               <td data-label="Quantity">{{ item.quantity }}</td>
-              <!-- Subtotal Column -->
               <td data-label="Subtotal" class="subtotal-column">
                 £{{ item.subtotal|floatformat:2 }}
               </td>
-              <!-- Actions -->
               <td data-label="Action">
                 <!-- Decrease Quantity Button -->
                 <form method="post" action="{% url 'decrease_quantity' item.cart_key %}" class="inline-form">
@@ -251,7 +285,7 @@
             {% endfor %}
             <!-- Overall Total Row -->
             <tr class="cart-total-row">
-              <td colspan="3" style="text-align:right;">Total:</td>
+              <td colspan="4" style="text-align:right;">Total:</td>
               <td class="subtotal-column">
                 £{{ total_price|floatformat:2 }}
               </td>
@@ -276,22 +310,35 @@
     </section>
   </main>
 
-  <!-- Footer (Fixed to the Bottom) -->
+  <!-- Modal Overlay for Enlarged Image -->
+  <div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <img id="modalImage" class="modal-content" src="" alt="Enlarged Image">
+  </div>
+
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 Eli Lilly. All rights reserved.</p>
   </footer>
 
-  <!-- JavaScript to hide messages after 3 seconds -->
+  <!-- JavaScript -->
   <script>
-    // Wait 3 seconds (3000 milliseconds) before hiding the messages
+    // Hide messages after 5 seconds
     setTimeout(function() {
       var messages = document.querySelector('.messages');
       if (messages) {
         messages.style.display = 'none';
-        // Alternatively, you can completely remove the element:
-        // messages.parentNode.removeChild(messages);
       }
-    }, 5000);
+    }, 3000);
+
+    // Functions to open and close the modal for enlarged images
+    function openModal(imageSrc) {
+      document.getElementById("modalImage").src = imageSrc;
+      document.getElementById("modalOverlay").style.display = "flex";
+    }
+    function closeModal() {
+      document.getElementById("modalOverlay").style.display = "none";
+    }
   </script>
 </body>
 </html>

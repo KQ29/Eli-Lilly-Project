@@ -33,7 +33,7 @@
       "description": "For Migraine Prevention",
       "image": "images/emgality.jpeg",
       "price": 180,
-      "quantity": 18,
+      "quantity": 20,
       "availability": "In Stock"
     },
     {
@@ -47,9 +47,9 @@
     },
     {
       "id": 6,
-      "name": "Farxiga",
+      "name": "Forxiga",
       "description": "For Heart & Kidney Health",
-      "image": "images/farxiga.webp",
+      "image": "images/farxiga.jpg",
       "price": 160,
       "quantity": 45,
       "availability": "In Stock"
@@ -58,7 +58,7 @@
       "id": 7,
       "name": "Ibrance",
       "description": "For Breast Cancer",
-      "image": "images/ibrance.jpg",
+      "image": "images/ibrance.webp",
       "price": 260,
       "quantity": 5,
       "availability": "Low Stock"
@@ -67,7 +67,7 @@
       "id": 8,
       "name": "Aimovig",
       "description": "For Migraine Prevention",
-      "image": "images/aimovig.jpeg",
+      "image": "images/aimovig.jpg",
       "price": 190,
       "quantity": 20,
       "availability": "In Stock"
@@ -94,7 +94,7 @@
       "id": 11,
       "name": "Kisqali",
       "description": "For Breast Cancer",
-      "image": "images/kisqali.jpg",
+      "image": "images/kisqali.webp",
       "price": 270,
       "quantity": 10,
       "availability": "Low Stock"
@@ -119,9 +119,9 @@
     },
     {
       "id": 14,
-      "name": "Steglatro",
+      "name": "Omvoh",
       "description": "For Heart & Kidney Health",
-      "image": "images/steglatro.webp",
+      "image": "images/omvoh.png",
       "price": 145,
       "quantity": 60,
       "availability": "In Stock"
@@ -139,7 +139,7 @@
       "id": 16,
       "name": "Ubrelvy",
       "description": "For Migraine Prevention",
-      "image": "images/ubrelvy.jpeg",
+      "image": "images/ubrelvy.jpg",
       "price": 175,
       "quantity": 35,
       "availability": "In Stock"
